@@ -2,17 +2,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
-/**
- *
- * @author Estudiante
- */
 public class ManipulacionArchivos {
 
     public static int countFileLines(String name) {
-        File archivo; // Apunta a un archivo fisico de dd
+        File archivo; // Apunta a un archivo físico de dd
         FileReader reader; // Llave con permiso de solo lectura
         BufferedReader bufer; // Recuperar info. del archivo
         int numLineas = 0;
@@ -98,11 +96,38 @@ public class ManipulacionArchivos {
 
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    public static void writeFile(String name) {
+        // apuntador a un espacio físico del disco duro
+        FileWriter archivo;
+        // La llave de acceso para escribir el archivo
+        PrintWriter writer;
+        // Para escribir de teclado al DD
+        BufferedReader bufer = new BufferedReader(new InputStreamReader(System.in));
+        String entrada;
+        char respuesta;
+
+        try {
+            // Apuntador al archivo que se va a crear
+            archivo = new FileWriter("C:\\archivos\\" + name + ".txt");
+            // Abrir el archivo en modo escritura
+            writer = new PrintWriter(archivo);
+            do {
+                System.out.println("Escribe algo para guardar al archivo: ");
+                entrada = bufer.readLine();
+                // Agregar o guardar al archivo
+                writer.println(entrada);
+                System.out.println("Escribe x para parar, cualquier otra tecla pra continuar: ");
+                entrada = bufer.readLine();
+                respuesta = entrada.charAt(0);
+            } while (respuesta != 'x');
+            archivo.close();
+        } catch (Exception e) {
+            System.out.println("Error al escribir el archivo:" + e.toString());
+        }
+
+    }
+
     public static void main(String[] args) throws IOException {
-        // TODO code application logic here
 
         BufferedReader bufer = new BufferedReader(
                 new InputStreamReader(System.in));
@@ -119,15 +144,19 @@ public class ManipulacionArchivos {
             System.out.println(unaMascota);
         }
 
-        System.out.println("Lectura de datos numericos: ");
+        System.out.println("Lectura de datos numéricos: ");
         System.out.println("Escribe el nombre del archivo: ");
         fileName = (bufer.readLine());
         numeros = fileToIntArray(fileName);
-        System.out.println("Contenido del arreglo d enuemros");
+        System.out.println("Contenido del arreglo de números");
         for (int unNumero : numeros) {
             System.out.println(unNumero);
         }
 
+        System.out.println("Crear un archivo de texto");
+        System.out.println("Escribe el nombre del archivo a crear: ");
+        fileName = bufer.readLine();
+        writeFile(fileName);
     }
 
 }
